@@ -48,6 +48,10 @@ board = np.zeros((n, n))
 for key in queens.keys():
     board[key, queens[key]] = 1
 
-print(board.T)
-print(J_best)
-print(J)
+# List containing positions to swap
+swappers = [i for i, x in enumerate(J) if x == min(J)]
+
+# print(board.T)
+
+# print(J_best)
+# print(J)
