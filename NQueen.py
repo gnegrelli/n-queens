@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import copy
 
@@ -25,6 +26,8 @@ def fitness(queen_list, pivot):
 # Number of queens and size of chessboard
 n = 15
 
+c = 0
+
 # Dictionary containing queens position
 queens = dict()
 
@@ -45,69 +48,83 @@ for i in range(n):
 J_best = (fitness(copy.copy(queens), None), copy.copy(queens))
 J_cur = J_best
 
-# Fitness vector
-J = []
+while J_best[0] > 0 and c < 1000:
 
-# Calculate fitness swapping each column to its neighbour
-for column in range(n):
-    J.append(fitness(copy.copy(queens), column))
+    # Fitness vector
+    J = []
 
-# List containing positions to swap in order
-swappers = np.argsort(J)
+    # Calculate fitness swapping each column to its neighbour
+    for column in range(n):
+        J.append(fitness(copy.copy(queens), column))
 
-# Update current solution and add move to Tabu list
-for i in swappers:
+    # List containing positions to swap in order
+    swappers = np.argsort(J)
 
-    if i not in tabu:
+    # Update current solution and add move to Tabu list
+    for i in swappers:
 
-        # Update queens position
-        try:
-            queens[i], queens[i + 1] = queens[i + 1], queens[i]
-        except KeyError:
-            queens[i], queens[0] = queens[0], queens[i]
+        if i not in tabu:
 
-        # Update current solution
-        J_cur = (J[i], queens)
+            # Update queens position
+            try:
+                queens[i], queens[i + 1] = queens[i + 1], queens[i]
+            except KeyError:
+                queens[i], queens[0] = queens[0], queens[i]
 
-        # Add move to the end of Tabu list
-        tabu.append(i)
+            # Update current solution
+            J_cur = (J[i], queens)
 
-        # Exit loop
-        break
+            # Add move to the end of Tabu list
+            if len(tabu) >= 7:
+                tabu = tabu[-7:]
+            tabu.append(i)
 
-    # In case move is not in tier1, but it is in Tabu list, and has solution better than J_best
-    elif i not in tabu[-tier1:] and J[i] > J_best:
+            # Exit loop
+            break
 
-        # Update queens position
-        try:
-            queens[i], queens[i + 1] = queens[i + 1], queens[i]
-        except KeyError:
-            queens[i], queens[0] = queens[0], queens[i]
+        # In case move is not in tier1, but it is in Tabu list, and has solution better than J_best
+        elif i not in tabu[-tier1:] and J[i] > J_best[0]:
 
-        # Update current solution
-        J_cur = (J[i], queens)
+            # Update queens position
+            try:
+                queens[i], queens[i + 1] = queens[i + 1], queens[i]
+            except KeyError:
+                queens[i], queens[0] = queens[0], queens[i]
 
-        # Remove move from middle of list and add it to the end of Tabu list
-        tabu.remove(i)
-        tabu.append(i)
+            # Update current solution
+            J_cur = (J[i], queens)
 
-        # Exit loop
-        break
+            # Remove move from middle of list and add it to the end of Tabu list
+            tabu.remove(i)
+            tabu.append(i)
 
-else:
-    # This will occur if for loop ends without breaking
-    print("All options are forbidden!")
+            # Exit loop
+            break
 
-# Update best solution
-if J_cur < J_best:
-    J_best = J_cur
+    else:
+        # This will occur if for loop ends without breaking
+        print("All options are forbidden!")
+
+    # Update best solution
+    if J_cur[0] < J_best[0]:
+        J_best = J_cur
+
+    # Increase counter
+    c += 1
 
 # Plot board for visual aid
-# board = np.zeros((n, n))
-# for key in queens.keys():
-#     board[key, queens[key]] = 1
+board = np.zeros((n, n))
+for key in queens.keys():
+    board[key, queens[key]] = 1
 # print(board.T)
 
-# print(J_best)
-# print(J)
-# print(np.argsort(J))
+print(J_best)
+print(len(tabu))
+print(c)
+
+# Plot chessboard with queens
+plt.matshow(board.T)
+plt.xticks(range(n))
+plt.yticks(range(n))
+plt.grid()
+plt.show()
