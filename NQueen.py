@@ -49,15 +49,14 @@ J = []
 for column in range(n):
     J.append(fitness(copy.copy(queens), column))
 
-board = np.zeros((n, n))
+# List containing positions to swap in order
+swappers = np.argsort(J)
 
-for key in queens.keys():
-    board[key, queens[key]] = 1
-
-# List containing positions to swap
-swappers = [i for i, x in enumerate(J) if x == min(J)]
-
+# board = np.zeros((n, n))
+# for key in queens.keys():
+#     board[key, queens[key]] = 1
 # print(board.T)
 
 # print(J_best)
-# print(J)
+print(J)
+print(np.argsort(J))
