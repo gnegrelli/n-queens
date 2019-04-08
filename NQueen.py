@@ -98,6 +98,9 @@ else:
     # This will occur if for loop ends without breaking
     print("All options are forbidden!")
 
+# Update best solution
+if J_cur < J_best:
+    J_best = J_cur
 
 # Plot board for visual aid
 # board = np.zeros((n, n))
