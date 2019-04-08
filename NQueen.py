@@ -22,11 +22,17 @@ def fitness(queen_list, pivot):
     return fit
 
 
+# Number of queens and size of chessboard
 n = 15
 
+# Dictionary containing queens position
 queens = dict()
 
+# List of possible positions (used to put each queen in a unique row)
 positions = list(range(n))
+
+# Initialize Tabu list
+tabu = []
 
 # Create queens
 for i in range(n):
