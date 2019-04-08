@@ -26,7 +26,9 @@ def fitness(queen_list, pivot):
 # Number of queens and size of chessboard
 n = 15
 
-c = 0
+# Initialize counter and declare maximum number of iterations
+counter = 0
+max_iter = 1000
 
 # Dictionary containing queens position
 queens = dict()
@@ -48,7 +50,7 @@ for i in range(n):
 J_best = (fitness(copy.copy(queens), None), copy.copy(queens))
 J_cur = J_best
 
-while J_best[0] > 0 and c < 1000:
+while J_best[0] > 0 and counter < max_iter:
 
     # Fitness vector
     J = []
@@ -110,21 +112,19 @@ while J_best[0] > 0 and c < 1000:
         J_best = J_cur
 
     # Increase counter
-    c += 1
+    counter += 1
 
 # Plot board for visual aid
-board = np.zeros((n, n))
-for key in queens.keys():
-    board[key, queens[key]] = 1
-# print(board.T)
+board = np.zeros(n*n)
+board[::2] = 1
+board = board.reshape((n, n))
 
-print(J_best)
-print(len(tabu))
-print(c)
+print("Solution for N-Queen Problem with n = %d" % n)
+print("Number of restrictions: ", J_best[0])
+print("Number of iterations: ", counter)
 
 # Plot chessboard with queens
-plt.matshow(board.T)
-plt.xticks(range(n))
-plt.yticks(range(n))
-plt.grid()
+plt.figure()
+plt.imshow(board.T, cmap='binary', interpolation='nearest')
+plt.scatter(queens.keys(), queens.values())
 plt.show()
