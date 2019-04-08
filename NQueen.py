@@ -11,15 +11,15 @@ def fitness(queen_list, pivot):
         except KeyError:
             queen_list[pivot], queen_list[0] = queen_list[0], queen_list[pivot]
 
-    J = 0
+    fit = 0
 
     for key in queen_list.keys():
         for q in range(key + 1, len(queen_list)):
             if abs(key - q) == abs(queen_list[key] - queen_list[q]):
-                print("SAME DIAGONAL", key, q)
-                J += 1
-
-    return J
+                # print("SAME DIAGONAL", key, q)
+                fit += 1
+    # print(50*"*")
+    return fit
 
 
 n = 15
@@ -33,7 +33,15 @@ for i in range(n):
     queens[i] = positions[np.random.randint(n - i)]
     positions.remove(queens[i])
 
-J = fitness(copy.copy(queens), None)
+# Calculate fitness of initial solution
+J_best = fitness(copy.copy(queens), None)
+
+# Fitness vector
+J = []
+
+# Calculate fitness swapping each column to its neighbour
+for column in range(n):
+    J.append(fitness(copy.copy(queens), column))
 
 board = np.zeros((n, n))
 
@@ -41,4 +49,5 @@ for key in queens.keys():
     board[key, queens[key]] = 1
 
 print(board.T)
+print(J_best)
 print(J)
