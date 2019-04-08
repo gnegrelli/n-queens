@@ -33,6 +33,8 @@ positions = list(range(n))
 
 # Initialize Tabu list
 tabu = []
+tier1 = 4
+tier2 = 10
 
 # Create queens
 for i in range(n):
@@ -52,11 +54,31 @@ for column in range(n):
 # List containing positions to swap in order
 swappers = np.argsort(J)
 
+# Update queens position and add move to Tabu list
+for i in swappers:
+
+    # Update queens position
+    if i not in tabu:
+        try:
+            queens[i], queens[i + 1] = queens[i + 1], queens[i]
+        except KeyError:
+            queens[i], queens[0] = queens[0], queens[i]
+
+        # Add move to Tabu list
+        tabu.append(i)
+
+        # Exit loop
+        break
+else:
+    # This will occur if for loop ends without breaking
+    print("All options are forbidden!")
+
+# Plot board for visual aid
 # board = np.zeros((n, n))
 # for key in queens.keys():
 #     board[key, queens[key]] = 1
 # print(board.T)
 
 # print(J_best)
-print(J)
-print(np.argsort(J))
+# print(J)
+# print(np.argsort(J))
