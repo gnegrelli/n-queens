@@ -64,11 +64,26 @@ for i in swappers:
         except KeyError:
             queens[i], queens[0] = queens[0], queens[i]
 
-        # Add move to Tabu list
+        # Add move to the end of Tabu list
         tabu.append(i)
 
         # Exit loop
         break
+
+    # In case move is not in tier1, but it is in Tabu list, and has solution better than J_best
+    elif i not in tabu[-tier1:] and J[i] > J_best:
+        try:
+            queens[i], queens[i + 1] = queens[i + 1], queens[i]
+        except KeyError:
+            queens[i], queens[0] = queens[0], queens[i]
+
+        # Remove move from middle of list and add it to the end of Tabu list
+        tabu.remove(i)
+        tabu.append(i)
+
+        # Exit loop
+        break
+
 else:
     # This will occur if for loop ends without breaking
     print("All options are forbidden!")
