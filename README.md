@@ -1,5 +1,3 @@
 # N-Queens Problem
 
-This code solves the N-Quens Problem through Tabu Search.
-
-
+This code solves the N-Queens Problem using Tabu Search.
