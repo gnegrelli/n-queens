@@ -42,7 +42,8 @@ for i in range(n):
     positions.remove(queens[i])
 
 # Calculate fitness of initial solution
-J_best = fitness(copy.copy(queens), None)
+J_best = (fitness(copy.copy(queens), None), copy.copy(queens))
+J_cur = J_best
 
 # Fitness vector
 J = []
@@ -54,15 +55,19 @@ for column in range(n):
 # List containing positions to swap in order
 swappers = np.argsort(J)
 
-# Update queens position and add move to Tabu list
+# Update current solution and add move to Tabu list
 for i in swappers:
 
-    # Update queens position
     if i not in tabu:
+
+        # Update queens position
         try:
             queens[i], queens[i + 1] = queens[i + 1], queens[i]
         except KeyError:
             queens[i], queens[0] = queens[0], queens[i]
+
+        # Update current solution
+        J_cur = (J[i], queens)
 
         # Add move to the end of Tabu list
         tabu.append(i)
@@ -72,10 +77,15 @@ for i in swappers:
 
     # In case move is not in tier1, but it is in Tabu list, and has solution better than J_best
     elif i not in tabu[-tier1:] and J[i] > J_best:
+
+        # Update queens position
         try:
             queens[i], queens[i + 1] = queens[i + 1], queens[i]
         except KeyError:
             queens[i], queens[0] = queens[0], queens[i]
+
+        # Update current solution
+        J_cur = (J[i], queens)
 
         # Remove move from middle of list and add it to the end of Tabu list
         tabu.remove(i)
@@ -87,6 +97,7 @@ for i in swappers:
 else:
     # This will occur if for loop ends without breaking
     print("All options are forbidden!")
+
 
 # Plot board for visual aid
 # board = np.zeros((n, n))
