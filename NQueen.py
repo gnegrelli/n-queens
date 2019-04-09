@@ -135,10 +135,8 @@ while J_best[0] > 0 and counter < max_iter:
 
 # Plot board for visual aid
 board = np.zeros((n, n))
-print(board)
 board[1::2, 0::2] = 1
 board[0::2, 1::2] = 1
-print(board)
 
 print("Solution for N-Queen Problem with n = %d" % n)
 print("Number of restrictions: ", J_best[0])
@@ -148,4 +146,6 @@ print("Number of iterations: ", counter)
 plt.figure()
 plt.imshow(board.T, cmap='binary', interpolation='nearest')
 plt.scatter(queens.keys(), queens.values())
+plt.xticks(range(n))
+plt.yticks(range(n))
 plt.show()
