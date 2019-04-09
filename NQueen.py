@@ -103,6 +103,25 @@ while J_best[0] > 0 and counter < max_iter:
             # Exit loop
             break
 
+        # In case move is not in tier2, but it is in Tabu list, and has solution better than J_cur
+        elif i not in tabu[-tier2:] and J[i] > J_cur[0]:
+
+            # Update queens position
+            try:
+                queens[i], queens[i + 1] = queens[i + 1], queens[i]
+            except KeyError:
+                queens[i], queens[0] = queens[0], queens[i]
+
+            # Update current solution
+            J_cur = (J[i], queens)
+
+            # Remove move from middle of list and add it to the end of Tabu list
+            tabu.remove(i)
+            tabu.append(i)
+
+            # Exit loop
+            break
+
     else:
         # This will occur if for loop ends without breaking
         print("All options are forbidden!")
