@@ -24,11 +24,11 @@ def fitness(queen_list, pivot):
 
 
 # Number of queens and size of chessboard
-n = 18
+n = 20
 
 # Initialize counter and declare maximum number of iterations
 counter = 0
-max_iter = 5000
+max_iter = 100
 
 # Dictionary containing queens position
 queens = dict()
@@ -38,8 +38,8 @@ positions = list(range(n))
 
 # Initialize Tabu list
 tabu = []
-tier1 = 4
-tier2 = 10
+tier1 = round(.2*n)
+tier2 = round(.5*n)
 
 # Create queens
 for i in range(n):
@@ -77,8 +77,8 @@ while J_best[0] > 0 and counter < max_iter:
             J_cur = (J[i], queens)
 
             # Add move to the end of Tabu list
-            if len(tabu) >= 7:
-                tabu = tabu[-7:]
+            if len(tabu) >= round(.6*n):
+                tabu = tabu[-round(.6*n):]
             tabu.append(i)
 
             # Exit loop
