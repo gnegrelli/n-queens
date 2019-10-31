@@ -24,11 +24,11 @@ def fitness(queen_list, pivot):
 
 
 # Number of queens and size of chessboard
-n = 20
+n = 200
 
 # Initialize counter and declare maximum number of iterations
 counter = 0
-max_iter = 100
+max_iter = 300
 
 # Dictionary containing queens position
 queens = dict()
@@ -56,7 +56,10 @@ while J_best[0] > 0 and counter < max_iter:
     J = []
 
     # Calculate fitness swapping each column to its neighbour
-    for column in range(n):
+    neighbour = np.random.randint(n)
+    for column in range(neighbour, int(neighbour + .1*n)):
+        if column >= n:
+            column = column - n
         J.append(fitness(copy.copy(queens), column))
 
     # List containing positions to swap in order
